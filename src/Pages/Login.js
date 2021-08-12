@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { PostWithToken } from "./apiCrud/datacrud";
+import { PostWithToken } from "../apiCrud/datacrud";
 
 export const Login = () => {
     const [userName, setUserName] = useState();

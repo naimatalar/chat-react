@@ -9,7 +9,7 @@ const NavigationTree = () => {
         <>
             <div className="logo"><a href="/" className="simple-text logo-normal">
 
-                <img style={{ width: "70%" }} src={require("../../assets/image/mutlu.png").default}></img>
+                <img style={{ width: "70%" }} src={require("../assets/image/mutlu.png").default}></img>
             </a></div>
             <div className="sidebar-wrapper">
                 <ul className="nav">

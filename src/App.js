@@ -7,11 +7,15 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { Login } from './Pages/Login';
-import { GetWithToken } from './Pages/apiCrud/datacrud';
-import NavigationTree from './Pages/component/navigationTree';
+import { GetWithToken } from './apiCrud/datacrud';
+import NavigationTree from './component/navigationTree';
+import { Navbar, NavbarPage } from './component/NavbarPage';
+import { User } from './Pages/User';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // 
+import { WebSite } from './Pages/WebSites';
 function App() {
   const [trueLogin, setTrueLogin] = useState(false)
-      
+  const [pageName, setPageName] = useState("")
   useEffect(() => {
     loginControl()
     // localStorage.removeItem("tokenkredicomtr")
@@ -32,7 +36,7 @@ function App() {
   } else {
     return (
       <Router>
-    
+
         <div className="" style={{ background: "white" }}>
           <div className="wrapper">
             <div className="sidebar" data-color="purple" data-background-color="white" data-image="../../assets/image/mutlu.pmg">
@@ -40,7 +44,7 @@ function App() {
               <NavigationTree ></NavigationTree>
             </div>
             <div className="main-panel">
-              <Navbar pageName={pageName}></Navbar>
+              <NavbarPage></NavbarPage>
 
 
 
@@ -54,9 +58,14 @@ function App() {
 
                       <div className="container-fluid">
                         <Route exact path="/"
-                          render={props => <Home {...props} pageName={() => { setPageName("Analiz") }} />}>
+                          render={props => <Home {...props} />}>
                         </Route>
-
+                        <Route  path="/user"
+                          render={props => <User {...props} pageName={() => { setPageName("Kullanıcılar") }} />}>
+                        </Route>
+                           <Route  path="/sites"
+                          render={props => <WebSite {...props} pageName={() => { setPageName("Web Siteler") }} />}>
+                        </Route>
                       </div>
 
 
@@ -69,12 +78,12 @@ function App() {
             </div>
           </div>
         </div>
-      
 
 
 
 
-    </Router >
+
+      </Router >
     )
   }
 }
@@ -82,8 +91,6 @@ function Home() {
   return (
     <div>
 
-      gfd
-      dfg
     </div>
   );
 }
