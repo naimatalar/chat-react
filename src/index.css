@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.mt1s{
+  border: 1px solid #3c8476;
+    border-radius: 5px;
+}
