@@ -13,10 +13,14 @@ import { Navbar, NavbarPage } from './component/NavbarPage';
 import { User } from './Pages/User';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // 
 import { WebSite } from './Pages/WebSites';
+import { Messages } from './Pages/Messages';
 function App() {
   const [trueLogin, setTrueLogin] = useState(false)
   const [pageName, setPageName] = useState("")
   useEffect(() => {
+
+
+
     loginControl()
     // localStorage.removeItem("tokenkredicomtr")
   }, [])
@@ -36,7 +40,9 @@ function App() {
   } else {
     return (
       <Router>
-
+        <object class="nns" type="text/html" data="http://localhost:3001/test.html" >
+          
+        </object>
         <div className="" style={{ background: "white" }}>
           <div className="wrapper">
             <div className="sidebar" data-color="purple" data-background-color="white" data-image="../../assets/image/mutlu.pmg">
@@ -60,11 +66,14 @@ function App() {
                         <Route exact path="/"
                           render={props => <Home {...props} />}>
                         </Route>
-                        <Route  path="/user"
+                        <Route path="/user"
                           render={props => <User {...props} pageName={() => { setPageName("Kullanıcılar") }} />}>
                         </Route>
-                           <Route  path="/sites"
+                        <Route path="/sites"
                           render={props => <WebSite {...props} pageName={() => { setPageName("Web Siteler") }} />}>
+                        </Route>
+                        <Route path="/message"
+                          render={props => <Messages {...props} pageName={() => { setPageName("Mesajlar") }} />}>
                         </Route>
                       </div>
 
