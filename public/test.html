@@ -63,95 +63,111 @@
       float: left;
       color: #999;
     }
-    .bdys{
+
+    .bdys {
       position: absolute;
-            z-index: 999999;
-            background: white;
-            height: 456px;
-            width: 290px;
+      z-index: 999999;
+      background: white;
+      height: 456px;
+      width: 290px;
+    }
+
+    .message-content {
+      display: none;
+    }
+
+    .wait-request-content {
+      display: none;
     }
   </style>
-<div>
-  
-</div>
-  <div class="cntynrs">
-    <img src="/w3images/bandmember.jpg" alt="Avatar">
-    <p>Hello. How are you today?</p>
-    <span class="time-right">11:00</span>
-  </div>
+  <div class="message-content">
 
-  <div class="cntynrs darker">
-    <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
-    <p>Hey! I'm fine. Thanks for asking!</p>
-    <span class="time-left">11:01</span>
-  </div>
 
-  <div class="cntynrs">
-    <img src="/w3images/bandmember.jpg" alt="Avatar">
-    <p>Sweet! So, what do you wanna do today?</p>
-    <span class="time-right">11:02</span>
-  </div>
 
-  <div class="cntynrs darker">
-    <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
-    <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-    <span class="time-left">11:05</span>
-  </div>
-  <textarea id="message-text">
+    <textarea id="message-text">
 
   </textarea>
+    <button id="send">Gönder</button>
+  </div>
+  <div class="message-request-content">
+    <input type="text" placeholder="Name" id="name">
+    <input type="text" placeholder="E-mail" id="email">
+    <button id="ok">Ok</button>
+  </div>
+  <div class="wait-request-content">
+    Please waiting
+  </div>
+
 </body>
 
 <script>
+  var connectionId = ""
 
-  var data = {
-    name: "",
-    connectionId: "",
-    mail: ""
-  }
-
-
-  $(function () {
-
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:9372/chathub", {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets
-      })
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
-    connection.on("ConnectionId", (id) => {
-      data.connection = id;
-      if (localStorage.getItem("ultumpclgs")) {
-        data = localStorage.getItem("ultumpclgs");
-      } else {
-        localStorage.setItem("ultumpclgs", data)
-      }
-    });
-    connection.on("SendMessage", (connectionId, message) => {
-
-    });
-
-
-    async function start() {
-      try {
-        await connection.start();
-        console.log("SignalR Connected.");
-      } catch (err) {
-        console.log("error", err);
-        setTimeout(start, 5000);
-      }
-    };
-    start();
-
-
-
-
-    $("#tick").click(async function () {
-
-      await connection.invoke("SendMessage", $("#message-text").val(), );
+  const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:9372/chathub", {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets
     })
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+  connection.on("ConnectionId", (id) => {
+
+    connectionId = id;
+
+    if (localStorage.getItem("ultumpclgs")) {
+      data = localStorage.getItem("ultumpclgs");
+    } else {
+      localStorage.setItem("ultumpclgs", data)
+    }
   });
+  connection.on("SendMessage", (connectionId, message) => {
+    $(".message-content").append(`<div class="cntynrs ">
+      <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
+      <p>${message}</p>
+      <span class="time-left">11:05</span>
+    </div>`)
+  });
+
+  connection.on("MessageRequest", (connectionId, name, mail, webSite, isRead) => {
+    if (isRead) {
+      $(".message-content").show()
+      $(".wait-request-content").hide()
+      $(".message-request-content").hide()
+
+    }
+
+  });
+
+  async function start() {
+    try {
+      await connection.start();
+      console.log("SignalR Connected.");
+    } catch (err) {
+      console.log("error", err);
+      setTimeout(start, 5000);
+    }
+  };
+  start();
+
+
+  $("#ok ").click(function () {
+
+    connection.invoke("MessageRequest", connectionId, $("#name").val(), $("#email").val(), location.origin, false);
+  })
+
+  $("#send").click(async function () {
+
+    await connection.invoke("SendMessageCustomer", connectionId, $("#message-text").val(), null);
+    $("#message-text").append(`<div class="cntynrs darker">
+      <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right">
+      <p>${$("#message-text").val()}</p>
+      <span class="time-left">11:05</span>
+    </div>`)
+  })
+
+   
+
+
 
 </script>
 
